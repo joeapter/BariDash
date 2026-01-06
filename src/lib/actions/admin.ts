@@ -5,9 +5,47 @@ import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/auth';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
+const IMAGE_BUCKET = 'product-images';
+
 function getLocale(formData: FormData) {
   const locale = formData.get('locale');
   return typeof locale === 'string' && locale ? locale : 'he';
+}
+
+function getImageFile(formData: FormData) {
+  const file = formData.get('image_file');
+  if (!(file instanceof File)) return null;
+  return file.size > 0 ? file : null;
+}
+
+function getImageExtension(file: File) {
+  const fromName = file.name.split('.').pop()?.toLowerCase() ?? '';
+  if (fromName && /^[a-z0-9]+$/.test(fromName)) return fromName;
+  const fromType = file.type.split('/').pop()?.toLowerCase() ?? '';
+  if (fromType && /^[a-z0-9]+$/.test(fromType)) return fromType;
+  return 'jpg';
+}
+
+async function uploadProductImage(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  productId: string,
+  file: File
+) {
+  const ext = getImageExtension(file);
+  const path = `products/${productId}/${crypto.randomUUID()}.${ext}`;
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const { error } = await supabase.storage.from(IMAGE_BUCKET).upload(path, buffer, {
+    contentType: file.type || `image/${ext}`,
+    cacheControl: '3600',
+    upsert: true
+  });
+
+  if (error) {
+    return null;
+  }
+
+  const { data } = supabase.storage.from(IMAGE_BUCKET).getPublicUrl(path);
+  return data.publicUrl ?? null;
 }
 
 function toNumber(value: FormDataEntryValue | null, fallback = 0) {
@@ -41,6 +79,8 @@ export async function createProduct(formData: FormData) {
   const nameHe = String(formData.get('name_he') ?? '').trim();
   const slug = String(formData.get('slug') ?? '').trim();
   const brand = String(formData.get('brand') ?? '').trim();
+  const imageUrl = String(formData.get('image_url') ?? '').trim();
+  const imageFile = getImageFile(formData);
   const price = toNumber(formData.get('price_ils'));
   const salePrice = toNumber(formData.get('sale_price_ils'));
   const stockQty = Math.max(0, Math.floor(toNumber(formData.get('stock_qty'), 0)));
@@ -51,18 +91,30 @@ export async function createProduct(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
-  await supabase.from('products').insert({
-    name_en: nameEn,
-    name_he: nameHe,
-    slug,
-    brand: brand || null,
-    price_ils: price,
-    sale_price_ils: salePrice || null,
-    stock_qty: stockQty,
-    primary_category_id: primaryCategoryId || null,
-    same_day_eligible: true,
-    is_active: true
-  });
+  const { data: created } = await supabase
+    .from('products')
+    .insert({
+      name_en: nameEn,
+      name_he: nameHe,
+      slug,
+      brand: brand || null,
+      image_url: imageUrl || null,
+      price_ils: price,
+      sale_price_ils: salePrice || null,
+      stock_qty: stockQty,
+      primary_category_id: primaryCategoryId || null,
+      same_day_eligible: true,
+      is_active: true
+    })
+    .select('id')
+    .single();
+
+  if (created && imageFile) {
+    const uploadedUrl = await uploadProductImage(supabase, created.id, imageFile);
+    if (uploadedUrl) {
+      await supabase.from('products').update({ image_url: uploadedUrl }).eq('id', created.id);
+    }
+  }
 
   revalidatePath(`/${locale}/admin/products`);
 }
@@ -77,20 +129,30 @@ export async function updateProduct(formData: FormData) {
     return;
   }
 
+  const imageUrl = String(formData.get('image_url') ?? '').trim();
+  const imageFile = getImageFile(formData);
+
   const supabase = await createSupabaseServerClient();
-  await supabase
-    .from('products')
-    .update({
-      name_en: String(formData.get('name_en') ?? '').trim(),
-      name_he: String(formData.get('name_he') ?? '').trim(),
-      brand: String(formData.get('brand') ?? '').trim(),
-      price_ils: toNumber(formData.get('price_ils')),
-      sale_price_ils: toNumber(formData.get('sale_price_ils')) || null,
-      stock_qty: Math.max(0, Math.floor(toNumber(formData.get('stock_qty'), 0))),
-      same_day_eligible: formData.get('same_day_eligible') === 'on',
-      is_active: formData.get('is_active') === 'on'
-    })
-    .eq('id', productId);
+  const updates = {
+    name_en: String(formData.get('name_en') ?? '').trim(),
+    name_he: String(formData.get('name_he') ?? '').trim(),
+    brand: String(formData.get('brand') ?? '').trim(),
+    image_url: imageUrl || null,
+    price_ils: toNumber(formData.get('price_ils')),
+    sale_price_ils: toNumber(formData.get('sale_price_ils')) || null,
+    stock_qty: Math.max(0, Math.floor(toNumber(formData.get('stock_qty'), 0))),
+    same_day_eligible: formData.get('same_day_eligible') === 'on',
+    is_active: formData.get('is_active') === 'on'
+  };
+
+  if (imageFile) {
+    const uploadedUrl = await uploadProductImage(supabase, productId, imageFile);
+    if (uploadedUrl) {
+      updates.image_url = uploadedUrl;
+    }
+  }
+
+  await supabase.from('products').update(updates).eq('id', productId);
 
   revalidatePath(`/${locale}/admin/products`);
 }

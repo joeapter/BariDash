@@ -34,10 +34,17 @@ export default async function AdminZonesPage({ params }: { params: Promise<{ loc
             className="rounded-2xl border-emerald-200 bg-white px-4 py-2"
           />
         </div>
+        <div className="mt-3 space-y-1 text-xs text-emerald-600">
+          <p>City should match what customers type at checkout (case-insensitive).</p>
+          <p>Fee is the delivery charge in ILS. Use 0 for free delivery.</p>
+          <p>Min order for free waives the fee when subtotal meets the threshold.</p>
+          <p>Estimated hours drives the ETA messaging (ex: 5 for same-day).</p>
+        </div>
         <label className="mt-4 flex items-center gap-2 text-sm text-emerald-700">
           <input type="checkbox" name="fast_and_free" />
           Fast &amp; Free
         </label>
+        <p className="mt-2 text-xs text-emerald-600">Fast &amp; Free highlights the 5-hour delivery promise.</p>
         <div className="mt-4">
           <Button type="submit">Create zone</Button>
         </div>
@@ -45,6 +52,9 @@ export default async function AdminZonesPage({ params }: { params: Promise<{ loc
 
       <div className="rounded-3xl border border-emerald-100 bg-white/90 p-6 shadow-soft">
         <h2 className="text-lg font-semibold text-emerald-950">Manage zones</h2>
+        <p className="mt-2 text-xs text-emerald-600">
+          Fee/min free/estimated hours control delivery pricing and ETA messaging for each city.
+        </p>
         <div className="mt-4 space-y-4">
           {(zones ?? []).map((zone) => (
             <form

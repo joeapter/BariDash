@@ -74,3 +74,14 @@ create policy "Order items insert own" on public.order_items
   for insert with check (
     exists (select 1 from public.orders where id = order_id and user_id = auth.uid())
   );
+
+alter table storage.objects enable row level security;
+create policy "Product images admin read" on storage.objects
+  for select using (bucket_id = 'product-images' and public.is_admin());
+create policy "Product images admin insert" on storage.objects
+  for insert with check (bucket_id = 'product-images' and public.is_admin());
+create policy "Product images admin update" on storage.objects
+  for update using (bucket_id = 'product-images' and public.is_admin())
+  with check (bucket_id = 'product-images' and public.is_admin());
+create policy "Product images admin delete" on storage.objects
+  for delete using (bucket_id = 'product-images' and public.is_admin());

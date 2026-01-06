@@ -12,6 +12,10 @@ module.exports = withNextIntl({
         protocol: 'https',
         hostname: 'cdn.baridashisrael.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'psmiumaslnnuuozjjsvb.supabase.co',
+      },
     ],
   },
 });
