@@ -17,7 +17,7 @@ const STATUSES = [
 export default async function AdminOrdersPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'admin' });
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: orders } = await supabase
     .from('orders')

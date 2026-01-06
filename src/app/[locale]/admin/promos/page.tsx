@@ -6,7 +6,7 @@ const DISCOUNT_TYPES = ['percent', 'amount'];
 
 export default async function AdminPromosPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data: promos } = await supabase
     .from('promos')
     .select('id, code, description_en, description_he, discount_type, discount_value, min_order_ils, is_active')

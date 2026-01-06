@@ -27,7 +27,7 @@ export async function updateOrderStatus(formData: FormData) {
     return;
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   await supabase.from('orders').update({ status }).eq('id', orderId);
 
   revalidatePath(`/${locale}/admin/orders`);
@@ -50,7 +50,7 @@ export async function createProduct(formData: FormData) {
     return;
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   await supabase.from('products').insert({
     name_en: nameEn,
     name_he: nameHe,
@@ -77,7 +77,7 @@ export async function updateProduct(formData: FormData) {
     return;
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   await supabase
     .from('products')
     .update({
@@ -111,7 +111,7 @@ export async function createZone(formData: FormData) {
     return;
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   await supabase.from('delivery_zones').insert({
     name_en: nameEn,
     name_he: nameHe,
@@ -135,7 +135,7 @@ export async function updateZone(formData: FormData) {
     return;
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   await supabase
     .from('delivery_zones')
     .update({
@@ -168,7 +168,7 @@ export async function createPromo(formData: FormData) {
     return;
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   await supabase.from('promos').insert({
     code,
     description_en: descriptionEn,
@@ -191,7 +191,7 @@ export async function updatePromo(formData: FormData) {
     return;
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   await supabase
     .from('promos')
     .update({

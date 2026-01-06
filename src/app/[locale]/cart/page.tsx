@@ -8,6 +8,23 @@ import { formatPrice } from '@/lib/format';
 import { localizeField } from '@/lib/localize';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
+type CartProduct = {
+  id: string;
+  slug: string;
+  name_en: string;
+  name_he: string;
+  price_ils: number;
+  sale_price_ils: number | null;
+  image_url: string | null;
+  stock_qty: number;
+};
+
+type CartItemRow = {
+  id: string;
+  quantity: number;
+  product: CartProduct;
+};
+
 export default async function CartPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'cart' });
@@ -28,13 +45,14 @@ export default async function CartPage({ params }: { params: Promise<{ locale: s
     );
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data } = await supabase
     .from('cart_items')
     .select(
       'id, quantity, product:products(id, slug, name_en, name_he, price_ils, sale_price_ils, image_url, stock_qty)'
     )
-    .eq('user_id', user.id);
+    .eq('user_id', user.id)
+    .returns<CartItemRow[]>();
 
   const items = data ?? [];
   const subtotal = items.reduce((sum, item) => {

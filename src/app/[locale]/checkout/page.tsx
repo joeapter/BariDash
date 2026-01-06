@@ -9,6 +9,19 @@ import { localizeField } from '@/lib/localize';
 import { meshulamConfigured } from '@/lib/meshulam';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
+type CheckoutCartProduct = {
+  name_en: string;
+  name_he: string;
+  price_ils: number;
+  sale_price_ils: number | null;
+};
+
+type CheckoutCartItemRow = {
+  id: string;
+  quantity: number;
+  product: CheckoutCartProduct;
+};
+
 export default async function CheckoutPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'checkout' });
@@ -29,11 +42,12 @@ export default async function CheckoutPage({ params }: { params: Promise<{ local
     );
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data } = await supabase
     .from('cart_items')
     .select('id, quantity, product:products(name_en, name_he, price_ils, sale_price_ils)')
-    .eq('user_id', user.id);
+    .eq('user_id', user.id)
+    .returns<CheckoutCartItemRow[]>();
 
   const items = data ?? [];
 

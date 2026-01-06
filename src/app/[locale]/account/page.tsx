@@ -19,7 +19,7 @@ export default async function AccountPage({ params }: { params: Promise<{ locale
     );
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data: orders } = await supabase
     .from('orders')
     .select('id, status, total_ils, created_at')

@@ -10,7 +10,7 @@ export async function getCategories(): Promise<Category[]> {
     return sampleCategories;
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data } = await supabase.from('categories').select('*').order('sort_order');
 
   return (data as Category[]) ?? sampleCategories;
@@ -22,7 +22,7 @@ export async function getCatalogProducts(categorySlug?: string): Promise<Product
     return sampleProducts.filter((product) => product.primary_category_id === categorySlug);
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   let query = supabase.from('products').select(productSelect).eq('is_active', true).order('name_en');
 
   if (categorySlug) {
@@ -48,7 +48,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     return sampleProducts.find((product) => product.slug === slug) ?? null;
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data } = await supabase
     .from('products')
     .select(productSelect)

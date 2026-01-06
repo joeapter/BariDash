@@ -7,6 +7,21 @@ import { calculateDeliveryEta } from '@/lib/delivery';
 import { createMeshulamSession, meshulamConfigured } from '@/lib/meshulam';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
+type CheckoutCartProduct = {
+  id: string;
+  name_en: string;
+  name_he: string;
+  price_ils: number;
+  sale_price_ils: number | null;
+  same_day_eligible: boolean;
+};
+
+type CheckoutCartItemRow = {
+  id: string;
+  quantity: number;
+  product: CheckoutCartProduct;
+};
+
 function getLocaleFromForm(formData: FormData) {
   const locale = formData.get('locale');
   return typeof locale === 'string' && locale ? locale : 'he';
@@ -15,7 +30,7 @@ function getLocaleFromForm(formData: FormData) {
 export async function startCheckout(formData: FormData) {
   const locale = getLocaleFromForm(formData);
   const user = await requireUser(locale);
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const fullName = String(formData.get('fullName') ?? '').trim();
   const phone = String(formData.get('phone') ?? '').trim();
@@ -33,7 +48,8 @@ export async function startCheckout(formData: FormData) {
     .select(
       'id, quantity, product:products(id, name_en, name_he, price_ils, sale_price_ils, same_day_eligible)'
     )
-    .eq('user_id', user.id);
+    .eq('user_id', user.id)
+    .returns<CheckoutCartItemRow[]>();
 
   if (!cartItems || cartItems.length === 0) {
     redirect(`/${locale}/cart`);

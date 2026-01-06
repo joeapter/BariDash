@@ -4,7 +4,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 export default async function AdminZonesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data: zones } = await supabase
     .from('delivery_zones')
     .select('id, name_en, name_he, city, fee_ils, min_order_free_ils, estimated_hours, fast_and_free, is_active')

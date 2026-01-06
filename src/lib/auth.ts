@@ -3,7 +3,7 @@ import { redirect, notFound } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 export async function getCurrentUser() {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data } = await supabase.auth.getUser();
   return data.user;
 }
@@ -19,7 +19,7 @@ export async function requireUser(locale: string) {
 }
 
 export async function requireAdmin(locale: string) {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data } = await supabase.auth.getUser();
   const user = data.user;
 

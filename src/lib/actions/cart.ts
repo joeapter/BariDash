@@ -23,7 +23,7 @@ export async function addToCart(formData: FormData) {
   const safeQuantity = Number.isFinite(quantity) && quantity > 0 ? quantity : 1;
 
   const user = await requireUser(locale);
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: existing } = await supabase
     .from('cart_items')
@@ -60,7 +60,7 @@ export async function updateCartItem(formData: FormData) {
   const quantity = Number(quantityRaw);
   const safeQuantity = Number.isFinite(quantity) ? quantity : 1;
   const user = await requireUser(locale);
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   if (safeQuantity <= 0) {
     await supabase.from('cart_items').delete().eq('id', itemId).eq('user_id', user.id);
@@ -84,7 +84,7 @@ export async function removeCartItem(formData: FormData) {
   }
 
   const user = await requireUser(locale);
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   await supabase.from('cart_items').delete().eq('id', itemId).eq('user_id', user.id);
 
