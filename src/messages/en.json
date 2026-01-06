@@ -1,0 +1,148 @@
+{
+  "brand": {
+    "name": "BariDash Israel",
+    "tagline": "Same-day delivery of premium vitamins and wellness supplements in Ramat Beit Shemesh."
+  },
+  "nav": {
+    "catalog": "Catalog",
+    "account": "Account",
+    "admin": "Admin",
+    "cart": "Cart",
+    "fastDelivery": "Fast & Free Delivery"
+  },
+  "hero": {
+    "headline": "Same-day delivery of premium vitamins and wellness supplements in Ramat Beit Shemesh.",
+    "subhead": "Order now and get 5-hour delivery with our Fast & Free service.",
+    "ctaPrimary": "Shop the catalog",
+    "ctaSecondary": "How it works",
+    "badge": "5-hour delivery"
+  },
+  "pillars": {
+    "title": "Built for daily wellness",
+    "items": {
+      "curated": {
+        "title": "Curated, clean formulas",
+        "body": "Top-tier brands with transparent ingredients."
+      },
+      "fast": {
+        "title": "Fast & Free in RBS",
+        "body": "Same-day drop-off within 5 hours."
+      },
+      "fresh": {
+        "title": "Fresh stock",
+        "body": "Carefully stored and tracked inventory."
+      }
+    }
+  },
+  "home": {
+    "featuredTitle": "Featured picks",
+    "viewAll": "View all",
+    "tags": {
+      "rbs": "Ramat Beit Shemesh",
+      "freeSameDay": "Free same-day delivery",
+      "premiumBrands": "Premium brands"
+    },
+    "fastCard": {
+      "eyebrow": "Fast & Free",
+      "title": "5-hour delivery window",
+      "body": "Order before 17:00 and we deliver today. Later orders arrive first thing tomorrow."
+    },
+    "fastHighlights": {
+      "coldChainTitle": "Cold-chain ready",
+      "coldChainBody": "Supplements stored the right way.",
+      "verifiedTitle": "Verified sourcing",
+      "verifiedBody": "Ingredient transparency guaranteed."
+    }
+  },
+  "fast": {
+    "title": "Fast & Free delivery in 5 hours",
+    "subtitle": "Ramat Beit Shemesh only for now. More Israeli cities coming next.",
+    "steps": {
+      "order": {
+        "title": "Order before 17:00",
+        "body": "Orders placed before the cutoff are delivered today."
+      },
+      "pack": {
+        "title": "We pack fast",
+        "body": "Our team prepares your items immediately."
+      },
+      "deliver": {
+        "title": "Same-day drop-off",
+        "body": "Track your delivery and get it within 5 hours."
+      }
+    }
+  },
+  "catalog": {
+    "title": "Full catalog",
+    "subtitle": "Shop by category, brand, and health goal.",
+    "filters": "Filters",
+    "all": "All",
+    "add": "Add to cart",
+    "soldOut": "Out of stock"
+  },
+  "product": {
+    "ingredients": "Ingredients",
+    "benefits": "Benefits",
+    "sameDay": "Same-day eligible",
+    "delivery": "Delivery in 5 hours"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "checkout": "Proceed to checkout",
+    "continue": "Continue shopping",
+    "update": "Update",
+    "remove": "Remove",
+    "summary": "Order summary",
+    "subtotal": "Subtotal"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "required": "Account required to complete checkout.",
+    "payment": "Payment",
+    "placeOrder": "Place order",
+    "fullName": "Full name",
+    "phone": "Phone",
+    "address": "Address",
+    "apartment": "Apartment / Floor",
+    "city": "City",
+    "notes": "Notes",
+    "addressPlaceholder": "Street + number",
+    "notesPlaceholder": "Delivery notes",
+    "fastDeliveryNote": "Fast & Free delivery is applied automatically for eligible zones.",
+    "missingPayment": "Meshulam credentials are missing. Add them to enable payments.",
+    "pendingTitle": "Order created",
+    "pendingBody": "Your order is saved. Payment is pending until the gateway is configured.",
+    "pendingCta": "Go to account",
+    "successTitle": "Payment confirmed",
+    "successBody": "Thanks! Your order is confirmed and moving to fulfillment.",
+    "successCta": "View orders"
+  },
+  "account": {
+    "title": "Account",
+    "subtitle": "Sign in to manage orders and addresses.",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "signOut": "Sign out",
+    "ordersTitle": "Orders",
+    "noOrders": "No orders yet."
+  },
+  "admin": {
+    "title": "Admin",
+    "orders": "Orders",
+    "products": "Products",
+    "zones": "Delivery zones",
+    "promos": "Promo codes",
+    "subtitle": "Admin dashboard for orders and catalog.",
+    "cards": {
+      "orders": "Track new orders and update delivery status.",
+      "products": "Create, edit, and manage stock levels.",
+      "zones": "Configure delivery fees and same-day rules.",
+      "promos": "Add promo codes and minimum order rules."
+    },
+    "latestOrders": "Latest orders",
+    "updateStatus": "Update status"
+  }
+}
